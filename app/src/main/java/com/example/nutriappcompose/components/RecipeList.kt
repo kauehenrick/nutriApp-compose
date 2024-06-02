@@ -81,7 +81,7 @@ fun RecipeList(platList: List<Fruit>, navController: NavController) {
                         }
                     }
                     items(platList) { fruit ->
-                        FruitCard(fruit.name, fruit.imageRes, fruit.desc)
+                        FruitCard(fruit.name, fruit.imageRes, fruit.desc, fruit.infoNutri, fruit.recipe, fruit.link)
                     }
                 }
             }
