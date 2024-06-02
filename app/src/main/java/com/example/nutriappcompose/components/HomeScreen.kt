@@ -24,9 +24,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.nutriappcompose.R
 
 fun String.toColor() = Color(android.graphics.Color.parseColor(this))
@@ -34,8 +37,7 @@ val backgroundColor = "#C0ECFF".toColor()
 val cardBgColor = "#2F323A".toColor()
 
 @Composable
-fun HomeScreen() {
-
+fun HomeScreen(navController: NavController) {
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -91,7 +93,9 @@ fun HomeScreen() {
                     contentDescription = "logo NutriApp"
                 )
 
-                Button(onClick = {  }) {
+                Button(onClick = {
+                    navController.navigate("RecipeList")
+                }) {
                     Text(text = "Entrar")
                 }
             }
@@ -100,8 +104,22 @@ fun HomeScreen() {
 
 }
 
-@Preview (showSystemUi = true, showBackground = true)
+@Composable
+fun Navigator() {
+    val navController = rememberNavController()
+    NavHost(navController = navController , startDestination = "HomeScreen") {
+        composable(route = "HomeScreen") {
+            HomeScreen(navController = navController)
+        }
+        composable(route = "RecipeList") {
+            RecipeList(platList = fruits, navController = navController)
+        }
+    }
+}
+
+/*@Preview (showSystemUi = true, showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     HomeScreen()
-}
+}*/
+
