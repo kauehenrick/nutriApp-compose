@@ -75,6 +75,7 @@ fun RecipeList(platList: List<Fruit>, navController: NavController) {
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             Text(
+                                color = MaterialTheme.colorScheme.inverseOnSurface,
                                 text = "Lista de Receitas",
                                 fontSize = 25.sp
                             )

@@ -1,6 +1,9 @@
 package com.example.nutriappcompose.components
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,7 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,7 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -33,7 +38,8 @@ import androidx.compose.ui.window.Dialog
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FruitCard(name: String, image: Int, desc: String, infoNutri: String, recipe: String, link: String) {
-    val localUriHandler = LocalUriHandler.current
+    val context = LocalContext.current
+    val intent = remember { Intent(Intent.ACTION_VIEW, Uri.parse(link)) }
 
     val openDialog = remember { mutableStateOf(false)  }
 
@@ -86,59 +92,73 @@ fun FruitCard(name: String, image: Int, desc: String, infoNutri: String, recipe:
 
     if (openDialog.value) {
         Dialog(onDismissRequest = { openDialog.value = false }) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .padding(16.dp),
-                shape = RoundedCornerShape(5.dp),
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
-                Column(
+                Card(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
-                        .padding(vertical = 25.dp)
-                        .padding(horizontal = 10.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                        .padding(16.dp),
+                    shape = RoundedCornerShape(5.dp),
                 ) {
-                    Text(
-                        text = name,
+                    Column(
                         modifier = Modifier
-                            .wrapContentSize(Alignment.Center),
-                        textAlign = TextAlign.Center,
-                        fontSize = 20.sp
-                    )
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .padding(vertical = 25.dp)
+                            .padding(horizontal = 10.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text(
+                            text = name,
+                            modifier = Modifier
+                                .wrapContentSize(Alignment.Center),
+                            textAlign = TextAlign.Center,
+                            fontSize = 20.sp
+                        )
 
-                    Image(
-                        painter = painterResource(id = image),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(130.dp)
-                            .padding(8.dp),
-                        contentScale = ContentScale.Fit
-                    )
+                        Image(
+                            painter = painterResource(id = image),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(130.dp)
+                                .padding(8.dp),
+                            contentScale = ContentScale.Fit
+                        )
 
-                    Text(
-                        text = infoNutri,
-                        modifier = Modifier
-                            .wrapContentSize(Alignment.Center),
-                        textAlign = TextAlign.Center
-                    )
+                        Text(
+                            text = infoNutri,
+                            modifier = Modifier
+                                .wrapContentSize(Alignment.Center),
+                            textAlign = TextAlign.Center
+                        )
 
-                    Spacer(
-                        modifier = Modifier.size(20.dp)
-                    )
+                        Spacer(
+                            modifier = Modifier.size(20.dp)
+                        )
 
-                    Text(
-                        text = recipe,
-                        modifier = Modifier
-                            .wrapContentSize(Alignment.Center),
-                        textAlign = TextAlign.Center
-                    )
+                        Text(
+                            text = recipe,
+                            modifier = Modifier
+                                .wrapContentSize(Alignment.Center),
+                            textAlign = TextAlign.Center
+                        )
 
-                    Spacer(
-                        modifier = Modifier.size(20.dp)
-                    )
+                        Spacer(
+                            modifier = Modifier.size(30.dp)
+                        )
+
+                        Text(
+                            text = link,
+                            modifier = Modifier
+                                .clickable {
+                                    run { context.startActivity(intent) }
+                                }
+                                .wrapContentSize(Alignment.Center),
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
             }
         }
